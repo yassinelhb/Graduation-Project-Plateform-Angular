@@ -1,0 +1,132 @@
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Gestion des Soutenances</h4>
+        <p class="card-description">
+         Tous les Soutenances
+        </p>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Note</th>
+                <th>Salle</th>
+                <th>Mise à jour</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let soutenance of Soutenances">
+                <td>{{soutenance.titre}}</td>
+                <td>{{soutenance.description}}</td>
+                <td>{{soutenance.dateSoutenance|date}}</td>
+                <td>{{soutenance.noteSoutenance}}</td>
+                <td>{{soutenance.salle}}</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-rounded btn-fw"  (click)="openDialog(soutenance.id)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Modifier</button>  <br> <br>
+                  <button type="button" class="btn btn-info btn-rounded btn-fw" (click)="deleteSoutenance(soutenance.id)" ><i class="mdi mdi-delete"></i>Supprimer</button> 
+                 
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div  class="col-md-8 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+          <i class="fa fa-paperclip fa-2x" aria-hidden="true"></i>
+        <h4 class="card-title">Ajouter une Soutenance</h4>
+        <p class="card-description">
+          Soutenance
+        </p>
+        <form class="forms-sample" [formGroup]="soutenanceform">
+         
+            <div class="form-group">
+                <label>Titre</label>
+              <div class="example-container">
+                <mat-form-field hintLabel="Ajouter Titre">
+                  <input matInput #input minlength="1" placeholder="Titre Soutenance"  formControlName="titre">
+                </mat-form-field>
+                <div *ngIf="soutenanceform.get('titre').errors?.required && soutenanceform.get('titre').touched " class="alert alert-fill-danger" role="alert">
+                    <i class="mdi mdi-alert-circle"></i>
+                    Oh snap! Ajouter un titre.
+               </div>
+              </div>
+              </div>
+
+          <div class="form-group">
+            <label>Description</label>
+          <div class="example-container">
+            <mat-form-field hintLabel="Min 10 characteres">
+              <input matInput #input minlength="10" placeholder="Ajouter une description" required minlength="10" formControlName="description">
+            </mat-form-field>
+          </div>
+          </div>
+
+         
+          <div class="form-group">
+              <label for="exampleInputCity1">Date de Soutenance</label>
+              <br>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker"  required id="exampleDate" placeholder="Choisir Une date" formControlName="dateSoutenance" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputCity1">Note de Soutenance</label>
+            <div class="example-container">
+            <mat-form-field hintLabel="Note entre 0 et 20 ">
+            <input matInput  placeholder="Ajouter une Note" ng-model="theValue" type="number" min="0" max="20" required  formControlName="noteSoutenance">
+          </mat-form-field>
+           </div>
+          
+          </div>
+         
+
+          <div class="form-group">
+            <label>Choisir Une Salle </label>
+          <div class="example-container">
+              <mat-form-field>
+                <mat-select placeholder="Salles Disponibles"  formControlName="salle" required >
+                  <mat-option value="Salle 06">Salle 06</mat-option>
+                  <mat-option value="Salle 04">Salle 04 </mat-option>
+                  <mat-option value="Salle 03">Salle 03</mat-option>
+                  <mat-option value="Salle 05">Salle 05</mat-option>
+                  <mat-option value="Salle 08">Salle 08</mat-option>
+
+                </mat-select>
+                <mat-hint align="end">Choix^</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="!soutenanceform.valid" class="btn btn-dark btn-rounded btn-fw" (click)="addSoutenance();soutenanceform.reset()" > <i class="fa fa-upload" aria-hidden="true"></i>
+            Ajouter</button>
+          
+          <button class="btn btn-light btn-rounded btn-fw">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+<mat-tab-group animationDuration="2000ms">
+    <mat-tab label="Calendrier des Soutenances">
+      <br>
+        <button  type="submit" class="btn btn-light btn-rounded btn-fw" (click)="calendar()"> Afficher tous les Soutenances</button>
+        <br>
+        <p-fullCalendar [events]="dat"  [options]="options" deepChangeDetection="true" (dateClick)="handleDateClick($event)" ></p-fullCalendar>
+    </mat-tab>
+    <mat-tab label="Les Statistiques ">
+      <app-stats></app-stats> </mat-tab>
+  </mat-tab-group>

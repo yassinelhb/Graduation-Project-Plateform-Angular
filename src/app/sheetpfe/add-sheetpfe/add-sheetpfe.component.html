@@ -1,0 +1,87 @@
+<!-- <div class="card">
+  <div class="card-body">
+    <h4 class="card-title">
+      <span *ngIf="edit; else title_add">Edit Sheet PFE</span>
+      <ng-template #title_add>
+        <span>Ajouter fiche PFE</span>
+      </ng-template>
+    </h4>
+    <form class="forms-sample ng-untouched ng-pristine ng-valid" [formGroup]="sheetForm">
+      <div class="form-group">
+        <label for="title" [class.text-danger]="title.invalid && title.touched">Titre</label>
+        <input class="form-control" id="title" placeholder="Title"  [class.border-danger]="title.invalid && title.touched" type="text" formControlName="title">
+        <div class="invalid-feedback" *ngIf="title.invalid && title.touched">
+          <span *ngIf="title.errors.required" class="text-small">The title is required. </span>
+          <span *ngIf="title.errors.minlength" class="text-small">The title must be at least 10 characters. </span>
+          <span *ngIf="title.hasError('whitespace')" class="text-small">Please provide a valid title. </span>
+        </div>
+      </div>
+      <div  class="form-group">
+        <label for="description" [class.text-danger]="description.invalid && description.touched">Description</label>
+        <textarea class="form-control" id="description" placeholder="Description" [class.border-danger]="description.invalid && description.touched" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="description.invalid && description.touched">
+          <span *ngIf="description.errors.required" class="text-small">The description is required. </span>
+          <span *ngIf="description.errors.minlength" class="text-small">The description must be at least 30 characters. </span>
+          <span *ngIf="description.hasError('whitespace')" class="text-small">Please provide a valid description. </span>
+        </div>
+      </div>
+      <div  class="form-group">
+        <label for="problematic" [class.text-danger]="problematic.invalid && problematic.touched">Problématique</label>
+        <textarea class="form-control" id="problematic" placeholder="Problematic" [class.border-danger]="problematic.invalid && problematic.touched" formControlName="problematic"></textarea>
+        <div class="invalid-feedback" *ngIf="problematic.invalid && problematic.touched">
+          <span *ngIf="problematic.errors.required" class="text-small">The problematic is required. </span>
+          <span *ngIf="problematic.errors.minlength" class="text-small">The problematic must be at least 30 characters. </span>
+          <span *ngIf="problematic.hasError('whitespace')" class="text-small">Please provide a valid problematic. </span>
+        </div>
+      </div>
+      <div  class="form-group">
+        <label for="feature" [class.text-danger]="features.invalid && features.touched">Fonctionnalités</label>
+        <textarea class="form-control" id="feature" placeholder="Feature"  [class.border-danger]="features.invalid && features.touched" formControlName="features"></textarea>
+        <div class="invalid-feedback" *ngIf="features.invalid && features.touched">
+          <span *ngIf="features.errors.required" class="text-small">The features is required. </span>
+          <span *ngIf="features.errors.minlength" class="text-small">The features must be at least 30 characters. </span>
+          <span *ngIf="features.hasError('whitespace')" class="text-small">Please provide a valid features. </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label [class.text-danger]="categories.invalid && categories.touched">Catégories</label>
+        <angular2-multiselect [data]="itemList" [(ngModel)]="selectedItems"
+          [settings]="settings"
+          (onDeSelectAll)="onDeSelectAll($event)"
+          formControlName="categories">
+        </angular2-multiselect>
+        <div class="invalid-feedback" *ngIf="categories.invalid && categories.touched">
+          <span class="text-small">The categorie is required. </span>
+        </div>
+      </div>
+      <div  class="form-group" formGroupName="entreprise">
+        <label for="entreprise" [class.text-danger]="entreprise.invalid && entreprise.touched">Entreprise</label>
+        <select class="form-control" id="entreprise" [class.border-danger]="entreprise.invalid && entreprise.touched" formControlName="id">
+          <option *ngFor="let entreprise of listentreprises" [value]="entreprise.id">{{ entreprise.nameEntreprise }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="entreprise.invalid && entreprise.touched">
+          <span class="text-small">The entreprise is required. </span>
+        </div>
+      </div>
+    </form>
+      <button class="btn btn-primary mr-2" type="submit" *ngIf="edit; else add" (click)="editSheet()" [disabled]="sheetForm.invalid">Enregistrer</button>
+      <button class="btn btn-light" (click)="cancel()" *ngIf="edit" >Annuler</button>
+     <ng-template #add>
+        <button class="btn btn-primary mr-2" type="submit" (click)="addSheet()" [disabled]="sheetForm.invalid">Ajouter</button>
+      </ng-template>
+  </div>
+
+  <ngx-spinner bdColor="rgba(255,255,255,0.1)">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ngx-spinner>
+
+</div>
+ -->

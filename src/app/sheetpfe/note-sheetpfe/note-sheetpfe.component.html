@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">Note {{ type }}</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="form-group mb-4">
+      <input type="number" class="form-control" [(ngModel)]="note" [class.border-danger]="error" (input)="changeNote()">
+      <span class="text-small text-danger" *ngIf="error"> {{ error }} </span>
+    </div>
+    <button type="button"  class="btn btn-primary mr-2" (click)="add()" [disabled]="disabled">Enregistrer</button>
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('cancel click')">Annuler</button>
+  </div>
+  <ngx-spinner bdColor="rgba(255,255,255,0.1)">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ngx-spinner>
+</div>
+
+
+

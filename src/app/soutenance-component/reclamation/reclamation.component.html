@@ -1,0 +1,27 @@
+<div class="card">
+<div  class="card-body grid-padding" *ngIf="!ok">
+          <form [formGroup]="Reclamation" >
+            <h2  class="card-title"><strong >AJOUT RECLAMATION</strong></h2>
+            <br>
+            <blockquote class="blockquote blockquote-info">
+              <h2 mat-dialog-title class="card-subtitle"><strong >Text Reclamation : </strong></h2>
+           <textarea mat-dialog-content id="textRec" placeholder="Add Reclamation here" class="card-body" [class.border-danger]="getText.invalid" formControlName="textRec"></textarea>
+            <div class="invalid-feedback" *ngIf="getText.invalid">
+              <h4 *ngIf="getText.errors.required" >The title is required. </h4>
+              <h4 *ngIf="getText.errors.minlength" >The title must be at least 10 characters. </h4>
+              <h4 *ngIf="getText.errors.maxlength" >The title must have at least 200 characters </h4>
+            </div>
+            <br>
+            <input  id="etudiant"   formControlName="etudiant" hidden>
+            <input  id="soutenance"  formControlName="soutenance" hidden >
+            <input  id="dateAjout" type="Date"  formControlName="dateAjout"  hidden>
+            <mat-dialog-actions>
+           <button mat-button mat-dialog-close matDialogClose="Reclamation" class="btn btn-inverse-info btn-fw grid-margin" type="submit" (click)="addReclamation()"  [disabled]="Reclamation.invalid" >Ajouter : {{ getText.value.length}} </button>
+            </mat-dialog-actions>
+            </blockquote>
+          </form>
+
+</div>
+</div>
+
+

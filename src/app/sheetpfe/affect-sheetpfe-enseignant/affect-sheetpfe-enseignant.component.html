@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">{{ action }} {{ type }}</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="form-group mb-4">
+      <select class="form-control" [(ngModel)]="enseignantID" (change)="changeEnseignant()" [class.border-danger]="error">
+        <option *ngIf="type === 'encadreur' && action === 'Affect'" value="encadreur">choisir encadreur</option>
+        <option *ngIf="type === 'rapporteur' && action === 'Affect'" value="rapporteur">choisir rapporteur</option>
+        <option *ngIf="type === 'validateur' && action === 'Affect'" value="validateur">choisir validateur</option>
+        <option *ngFor="let enseignant of enseignants" [ngValue]="enseignant.id">{{ enseignant.prenom }} {{ enseignant.nom }} - {{ enseignant.email }}</option>
+      </select>
+      <span class="text-small text-danger" *ngIf="error"> {{ error }} </span>
+    </div>
+    <button type="button"  class="btn btn-primary mr-2" (click)="affect()" [disabled]="disabled" *ngIf="action === 'Affect'">Affecter</button>
+    <button type="button"  class="btn btn-primary mr-2" (click)="update()" [disabled]="disabled" *ngIf="action === 'Update'">Modifier</button>
+    <button type="button" class="btn btn-light" (click)="modal.dismiss('cancel click')">Annuler</button>
+  </div>
+
+  <ngx-spinner bdColor="rgba(255,255,255,0.1)">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ngx-spinner>
+</div>
+
+

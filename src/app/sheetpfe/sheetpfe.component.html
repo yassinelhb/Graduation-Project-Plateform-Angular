@@ -1,0 +1,153 @@
+<div class="row">
+  <div class="card" *ngIf="notFound ; else found">
+    <div class="card-body">
+      <img [src]="notFound" class="img_404">
+    </div>
+  </div>
+  <ng-template #found>
+    <div class="col-lg-12" *ngIf="user.role === 'Etudiant'">
+     <app-show-sheetpfe></app-show-sheetpfe>
+    </div>
+    <div class="col-lg-12" *ngIf="user.role != 'Etudiant'">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">List Fiches PFE</h4>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-fill-success mb-5" role="alert" *ngIf="alert"><i class="mdi mdi-alert-circle"></i> Fichier import avec success. </div>
+
+          <div class="nav-filter" *ngIf="user.role === 'DirecteurDesStages' && !param">
+            <button (click)="upload()" class="btn btn-primary mb-4">Import Excel</button>
+            <div class="row grid-margin">
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <select class="form-control" [(ngModel)]="etat" (change)="getSheetPFEs()">
+                  <option value="ALL">ALL</option>
+                  <option value="DEFAULT">Default</option>
+                  <option value="REFUSE">Refuse</option>
+                  <option value="ACCEPTED">Accepted</option>
+                  <option value="PRE_VALIDATE">Pre_validate</option>
+                  <option value="VALIDATE">Validate</option>
+                </select>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <input type="month" class="form-control" [(ngModel)]="year" (change)="getSheetPFEs()"></div>
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <select class="form-control"  [(ngModel)]="pays" (change)="getSheetPFEs()">
+                  <option value="ALL">choice entreprise</option>
+                  <option *ngFor="let entreprise of entreprises" [ngValue]="entreprise.pays"> {{ entreprise.nameEntreprise }} </option>
+                </select>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <select class="form-control" [(ngModel)]="categorie" (change)="getSheetPFEs()">
+                  <option value="0">choice categorie</option>
+                  <option *ngFor="let categorie of categories" [ngValue]="categorie.id"> {{ categorie.name }} </option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-inverse-info btn-fw grid-margin" type="button" (click)="reset()">Reset</button>
+          </div>
+          <div class="nav-filter" *ngIf="user.role === 'Enseignant' && !param">
+            <div class="row grid-margin">
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <select class="form-control" [(ngModel)]="type" (change)="getSheetPFEs()">
+                  <option value="ALL">ALL</option>
+                  <option value="VALIDATEUR">À Validé</option>
+                  <option value="ENCADREUR">À Encadré</option>
+                  <option value="RAPPORTEUR">À reporté</option>
+                </select>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <input type="month" class="form-control" [(ngModel)]="year" (change)="getSheetPFEs()">
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <input type="month" class="form-control" [(ngModel)]="toyear" (change)="getSheetPFEs()">
+              </div>
+            </div>
+            <button class="btn btn-inverse-info btn-fw grid-margin" type="button" (click)="reset()">Réinitialiser</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th *ngIf="user.role === 'Enseignant' && type === 'ALL' && param != '_modify'"></th>
+                <th>
+                  Fiche PFE
+                </th>
+                <th>
+                  Etudiant
+                </th>
+                <th>
+                  Entreprise
+                </th>
+                <th>
+                  Etat
+                </th>
+                <th>
+                  Action
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let sheet of sheets |  angularPaginator :{ itemsPerPage: 10, currentPage: p }">
+                <td *ngIf="user.role === 'Enseignant' && type === 'ALL' && param != '_modify'" class="text-warning" [innerText]="enseignantType(sheet)">
+                </td>
+                <td class="py-1">
+                  {{ sheet.title }}
+                </td>
+                <td>
+                  {{ sheet.etudiant.prenom }} {{ sheet.etudiant.nom }}
+                </td>
+                <td>
+                  {{ sheet.entreprise.nameEntreprise }}
+                </td>
+                <td>
+                  <span class="text-info">{{ sheet.etat }}</span>
+                </td>
+                <td>
+                  <button class="btn btn-primary" [routerLink]="['.',sheet.id]" *ngIf="user.role === 'ChefDeDepartement'">
+                    <span *ngIf="param === 'accepted'">Affecter Validateur </span>
+                    <span *ngIf="param === 'waitEncadreur'">Affecter Encadreur</span>
+                    <span *ngIf="param === 'waitRapporter'">Affecter Rapporteur</span>
+                    <span *ngIf="param === 'waitNote'">Voir</span>
+                  </button>
+                  <button class="btn btn-primary" [routerLink]="['.',sheet.id]" *ngIf="user.role === 'DirecteurDesStages' || user.role === 'Enseignant' ">Voir</button>
+                </td>
+              </tr>
+              <tr *ngIf="sheets.length === 0" class="text-center">
+                <td colspan="6" *ngIf="user.role === 'Enseignant' && type === 'ALL' && param != '_modify'; else cols5" >
+                  Il n’y a pas de fichies
+                </td>
+                <ng-template #cols5>
+                  <td colspan="5">
+                    Il n’y a pas de fichies
+                  </td>
+                </ng-template>
+              </tr>
+              </tbody>
+            </table>
+            <nav aria-label="Page navigation example" *ngIf="size > 0">
+              <ngb-pagination [collectionSize]="size" [(page)]="p" (pageChange)="p = $event" aria-label="Default pagination">
+                <ng-template ngbPaginationPrevious><i class="fa fa-angle-left"></i></ng-template>
+                <ng-template ngbPaginationNext><i class="fa fa-angle-right"></i></ng-template>
+              </ngb-pagination>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ngx-spinner bdColor="rgba(255,255,255,0.1)">
+      <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow text-info" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </ngx-spinner>
+
+  </ng-template>
+</div>
+

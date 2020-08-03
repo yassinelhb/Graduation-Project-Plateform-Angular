@@ -1,0 +1,121 @@
+<div class="card">
+
+
+
+
+
+  <div *ngIf="user.role === 'ChefDeDepartement' ||  user.role === 'DirecteurDesStages' || user.role === 'Admin' || user.role === 'SuperAdmin' || user.role === 'Enseignant'  ">
+    <div *ngIf="notification.length !== 0 ">
+      <app-notification-rs>
+
+      </app-notification-rs>
+    </div>
+    <div *ngIf="notification.length === 0 ">
+
+
+      <div *ngIf="soutenance.length === 0">
+        <div class="card-body grid-padding">
+        <blockquote class="blockquote blockquote-info">
+          <h3 class="card-header">Suivi des notes soutenances</h3><br>
+          <h4 class="card-title"><strong>nombre de soutenance Notés :  {{stat[0]}} </strong> </h4>
+          <h4 class="card-title"><strong>la meilleur note : {{stat[2]}} </strong></h4>
+          <h4 class="card-title"><strong>la plus faible note :  {{stat[1]}} </strong></h4>
+          <h4 class="card-title"><strong>la moyenne des notes : {{stat[3]}} </strong></h4>
+        </blockquote>
+        </div>
+      </div>
+
+
+    <div class="card-body grid-padding" *ngFor="let s of allsoutenance"  >
+
+      <div *ngIf="s[5] === 0">
+
+        <blockquote class="blockquote blockquote-info">
+          <h3 class="card-header">Soutenance Non Noté ID: {{s[4]}}</h3><br>
+          <h4 class="card-title"><strong>Title:</strong></h4>
+          <p class="card-description">  {{s[0]}} </p>
+
+          <h4 class="card-title"><strong>Description:</strong></h4>
+          <p class="card-description">
+            {{s[1]}}
+          </p>
+
+          <h4 class="card-title"><strong>Salle:</strong></h4>
+          <p class="card-description">
+            {{s[3]}}
+          </p>
+          <input [value]="s[4]"  hidden>
+          <div *ngIf="user.role === 'ChefDeDepartement' ||  user.role === 'DirecteurDesStages' || user.role === 'Admin' || user.role === 'SuperAdmin' ">
+            <button class="btn btn-inverse-info btn-fw grid-margin" (click)="ajoutNotif(s[4])" >Notifier Enseignant</button>
+          </div>
+          <div *ngIf="user.role === 'Enseignant'">
+            <button class="btn btn-inverse-info btn-fw grid-margin" (click)="afficherAjoutNote()">Ajouter Note</button>
+            <div *ngIf="submitted && !ajout">
+
+              <form [formGroup]="AddNote" *ngIf="submitted || ajout">
+                <input type="number" [value]="s[4]" formControlName="ids" #idS hidden>
+                <label class="card-title"><strong>Note jury 1 :</strong></label>
+                <input type="number" placeholder="note jury 1"  formControlName="note1" #note>
+                <label class="card-title"><strong>Note jury 2 :</strong></label>
+                <input type="number" placeholder="note jury 2" formControlName="note2" #notee>
+                <button class="btn btn-inverse-info btn-fw grid-margin" type="submit"  (click)="ajouterNote(idS,note,notee)" [disabled]="AddNote.invalid">Confirmer</button>
+
+              </form>
+            </div>
+          </div>
+          <form [formGroup]="ajoutNotification" hidden>
+          <input type="text" formControlName="etat" #etat>
+            <input type="text" [value]="s[4]"   formControlName="text"  #text>
+            <input type="number" formControlName="idEnseignant" #idEnseignant>
+          </form>
+        </blockquote>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+
+
+<div class="card" *ngIf="user.role === 'Etudiant'" >
+  <div *ngIf="notification.length !== 0 ">
+    <app-notification-rs>
+
+    </app-notification-rs>
+  </div>
+  <div *ngIf="notification.length === 0">
+
+  <div class="card-body grid-padding" *ngFor="let t of note" >
+
+    <blockquote class="blockquote blockquote-info">
+ <div *ngIf="t=== 0">
+      <h4 class="card-title">Note</h4>
+      <p class="card-description">  vous n'avez pas encore recu une note </p>
+ </div>
+      <div *ngIf="t !== 0">
+        <h4 class="card-title">La note de votre soutenance est :</h4>
+        <p class="card-description" ><strong>{{t}}</strong>   </p>
+        <button class="btn btn-inverse-info btn-fw grid-margin" mat-raised-button (click)="openDialog()">Ajouter Reclamation</button>
+        <button class="btn btn-inverse-info btn-fw grid-margin" type="submit" (click)="consulterRec()">Consulter Reclamation</button>
+
+        <div *ngIf="click">
+          <app-reclamation>
+
+          </app-reclamation>
+        </div>
+        <div *ngIf="afiche">
+          <app-reclamation-display>
+
+          </app-reclamation-display>
+
+        </div>
+
+
+      </div>
+
+    </blockquote>
+  </div>
+  </div></div>
+  </div>
+
+<router-outlet></router-outlet>

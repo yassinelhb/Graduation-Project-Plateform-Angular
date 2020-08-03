@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Mise à jour</h1>
+<h5> Mise à jour d'une Soutenance {{data.Soutenance.id}}</h5>
+<div mat-dialog-content>
+  <form [formGroup]="refuseForm">
+  <label>Titre</label>
+  <input class="form-control" [(ngModel)]="data.Soutenance.titre" formControlName="titre">
+  <label>Description</label>
+  <input class="form-control" [(ngModel)]="data.Soutenance.description"  formControlName="description">
+  <label>Date Soutenance</label>
+  <input class="form-control" [(ngModel)]="data.Soutenance.dateSoutenance" formControlName="dateSoutenance">
+  <label>Note Soutenance</label>
+  <input class="form-control" [(ngModel)]="data.Soutenance.noteSoutenance" formControlName="noteSoutenance">
+  <label>Salle</label>
+  <input class="form-control"  [(ngModel)]="data.Soutenance.salle" formControlName="salle" >
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="RefuseMod(data.Soutenance.id)" cdkFocusInitial>Confirmer</button> 
+</div>

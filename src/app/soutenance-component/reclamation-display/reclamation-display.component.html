@@ -1,0 +1,57 @@
+
+<div *ngIf="user.role === 'ChefDeDepartement' ||  user.role === 'DirecteurDesStages' || user.role === 'Admin' || user.role === 'SuperAdmin' || user.role === 'Enseignant' ">
+<div class="card" >
+  <div *ngIf="reclamation.length === 0">
+    <div *ngIf=" user.role === 'Admin'">
+    <h3  class="card-header">Cette reclamation à été traiter par l'enseignant</h3>
+    </div>
+    <div *ngIf=" user.role === 'Enseignant'">
+      <h3  class="card-header">Cette reclamation à été traiter par le directeur de stages</h3>
+    </div>
+  </div>
+  <div *ngIf="reclamation.length > 0">
+  <div class="card-body grid-padding" *ngFor="let rec of reclamation" >
+
+    <blockquote class="blockquote blockquote-info">
+      <div>
+        <h4 class="card-title"><strong>Text Reclamation :</strong></h4>
+        <p class="card-description" >{{rec[1]}} </p>
+        <h4 class="card-title"><strong>Etudiant :</strong></h4>
+        <p class="card-description" >{{rec[2].nom}} {{rec[2].prenom}}  </p>
+        <h4 class="card-title"><strong>Titre Soutenance </strong></h4>
+        <p class="card-description" >{{rec[3]}}  </p>
+        <h4 class="card-title"><strong>Date Ajout :</strong></h4>
+        <p class="card-description" >{{rec[0]}}   </p>
+
+        <button class="btn btn-warning" (click)="deleteReclamation(rec[4], rec[2].id )">Traiter reclamation</button>
+      </div>
+
+    </blockquote>
+  </div>
+  </div>
+</div>
+</div>
+
+
+
+<div class="card" *ngIf="user.role === 'Etudiant'" >
+  <div class="card" >
+
+      <div class="card-body grid-padding" *ngFor="let recla of mareclamation" >
+        <blockquote class="blockquote blockquote-info">
+          <div>
+            <h4 class="card-title"><strong>Text Reclamation :</strong></h4>
+            <p class="card-description" >{{recla[0]}} </p>
+            <h4 class="card-title"><strong>Titre Soutenance </strong></h4>
+            <p class="card-description" >{{recla[2]}}  </p>
+            <h4 class="card-title"><strong>Date Ajout :</strong></h4>
+            <p class="card-description" >{{recla[1]}}   </p>
+
+          </div>
+
+        </blockquote>
+      </div>
+
+  </div>
+
+</div>

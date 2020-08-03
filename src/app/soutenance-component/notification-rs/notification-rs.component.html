@@ -1,0 +1,32 @@
+<div class="card" >
+  <div *ngIf="notification.length === 0  ">
+    <h3  class="card-header"> aucune notification n'a ete saisie </h3>
+  </div>
+  <div *ngIf="notification.length > 0 ">
+    <div class="card-body grid-padding" *ngFor="let rec of notification" >
+
+      <blockquote class="blockquote blockquote-info">
+<div *ngIf="user.role === 'Admin'">
+  <h3 class="card-header">Notification : </h3><br>
+</div>
+        <div *ngIf="user.role === 'Enseignant'">
+          <h3 class="card-header">Notification :</h3><br>
+        </div>
+        <div *ngIf="user.role === 'Etudiant'">
+          <h3 class="card-header">Notification :</h3><br>
+        </div>
+
+        <div>
+          <h4 class="card-title"><strong>{{rec[1]}}</strong></h4>
+        </div>
+        <div *ngIf="user.role === 'Admin' || user.role === 'Enseignant'  ">
+          <div *ngIf="rec[1].substr(0,1) == '+' ">
+            <button type="submit"  class="btn btn-inverse-info btn-fw grid-margin" (click)="traiterNotification(rec[0])">Consulter</button>
+          </div>
+        </div>
+        <button type="submit"  class="btn btn-inverse-info btn-fw grid-margin" (click)="traiterNotificationConflit(rec[0])">Traiter Notification</button>
+      </blockquote>
+    </div>
+  </div>
+</div>
+

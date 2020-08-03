@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Administrateurs</h4>
+        <p class="card-description">
+          Liste des administrateurs
+        </p>
+        <div class="spinner-border" role="status" *ngIf="loading">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <div class="table-responsive" *ngIf="!loading">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Ecole</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let admin of admins;">
+                <td>{{admin.prenom}} {{admin.nom}}</td>
+                <td>{{admin.email}}</td>
+                <td *ngIf="admin.ecole!==null">{{admin.ecole.nom}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="ajouter">
+          <button class="btn btn-primary btn-fw" type="button" (click)=(openForm())>Ajouter un administrateur</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

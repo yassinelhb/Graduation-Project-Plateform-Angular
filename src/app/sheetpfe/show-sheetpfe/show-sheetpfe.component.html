@@ -1,0 +1,161 @@
+<div class="card" *ngIf="notFound ; else found">
+  <div class="card-body">
+    <img [src]="notFound" class="img_404">
+  </div>
+</div>
+<ng-template #found>
+  <div class="card" *ngIf="sheet && edit === false">
+    <div class="card-body">
+      <h4 class="card-title">Fiche PFE</h4>
+      <app-modify-sheetpfe *ngIf="user.role === 'Enseignant' && sheetModify; else notification" [sheet]="sheet" (hide)="hideDetails()"></app-modify-sheetpfe>
+      <ng-template #notification>
+        <div class="card card-inverse-info" *ngIf="notify.length">
+          <div class="card-body" *ngFor="let item of notify">
+            <p> {{ item.title }} </p>
+            <p> {{ item.note }} </p>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+
+    <div class="card-body">
+      <h4 class="card-title">Titre</h4>
+      <p class="card-description"> {{ sheet.title }} </p>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Description</h4>
+      <p class="card-description">
+        {{ sheet.description }}
+      </p>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Problématique</h4>
+      <p class="card-description">
+        {{ sheet.problematic }}
+      </p>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Fonctionnalités</h4>
+      <p class="card-description">
+        {{ sheet.features }}
+      </p>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Catégories</h4>
+      <ul class="list-arrow">
+        <li *ngFor="let categorie of sheet.categories"> {{ categorie.name }} </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title">Entreprise</h4>
+      <p class="card-description">
+        <a href="" class="text-info"> {{ sheet.entreprise?.nameEntreprise }} </a>
+      </p>
+      <p>{{ sheet.entreprise?.adresse }} {{ sheet.entreprise?.pays }}</p>
+      <p><i class="fa fa-envelope-o"></i> {{ sheet.entreprise?.emailEntreprise }} </p>
+      <p><i class="fa fa-phone"></i> {{ sheet.entreprise?.telEntreprise }} </p>
+
+    </div>
+    <div class="card-body" *ngIf="user.role != 'Etudiant'">
+      <h4 class="card-title">Etudiant</h4>
+      <p class="card-description">
+        <a href="" class="text-info"> {{ sheet.etudiant?.prenom }} {{ sheet.etudiant?.nom }} </a>
+      </p>
+      <p><i class="fa fa-envelope-o"></i> {{ sheet.etudiant?.email }} </p>
+    </div>
+    <div class="card-body" *ngIf="sheet.enseignantsheet?.length">
+      <h4 class="card-title">Stuff</h4>
+      <div class="card-body"  *ngFor="let item of sheet.enseignantsheet.slice().reverse()">
+        <h4 class="card-title"> {{ item.type }}</h4>
+        <p class="card-description">
+          <a href="" class="text-info"> {{ item.enseignant.prenom }} {{ item.enseignant.nom }} </a>
+        </p>
+        <p><i class="fa fa-envelope-o"></i> {{ item.enseignant.email }} </p>
+        <p *ngIf="sheet.noteEncadreur > -1 && item.type === 'ENCADREUR'">note : {{ sheet.noteEncadreur }}</p>
+        <p *ngIf="sheet.noteRapporteur > -1  && item.type === 'RAPPORTEUR'">note : {{ sheet.noteRapporteur }}</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-info mb-4">
+        <p *ngIf="user.role === 'Etudiant' &&  sheetModify; else checked " class="text-info">Votre modification attend l'acceptation de l'encadreur.</p>
+        <ng-template #checked>
+          <p *ngIf="(sheet.etat === 'DEFAULT' || sheet.etat === 'REFUSE') && user.role != 'DirecteurDesStages' &&  user.role != 'Enseignant';else validate ">La fiche PFE en cours de <span class="text-warning"> vérification</span></p>
+        </ng-template>
+        <ng-template #validate>
+          <p *ngIf="(sheet.etat === 'PRE_VALIDATE' || sheet.etat === 'REQUEST') && user.role != 'Enseignant';else waiting ">La fiche PFE en cours de <span class="text-warning"> validation</span></p>
+        </ng-template>
+        <ng-template #waiting>
+          <p  *ngIf="exist_v === false && sheet.etat === 'ACCEPTED';else textecadreur">La fiche PFE en attente d’affectation du <span class="text-warning"> validateur .</span></p>
+            <ng-template #textecadreur>
+              <p  *ngIf="exist_e === false && sheet.etat === 'VALIDATE';else textrapporteur">La fiche PFE en attente d’affectation du <span class="text-warning"> encadreur .</span></p>
+            </ng-template>
+            <ng-template #textrapporteur>
+              <p *ngIf="exist_r === false && sheet.etat === 'VALIDATE'">La fiche PFE en attente d’affectation du <span class="text-warning"> rapporteur .</span></p>
+            </ng-template>
+          <p *ngIf="((exist_e === true &&  sheet.noteEncadreur < 0) || (exist_r === true && sheet.noteRapporteur < 0)) && sheet.etat === 'VALIDATE'">
+            La fiche PFE en attente
+            <span class="text-warning" *ngIf=" sheet.noteEncadreur < 0 && exist_e === true "> note encadreur </span>
+              <span *ngIf=" sheet.noteEncadreur < 0 && sheet.noteRapporteur < 0 && exist_r === true"> and </span>
+              <span class="text-warning" *ngIf="sheet.noteRapporteur < 0 && exist_r === true"> note rapporteur .</span>
+          </p>
+          <p *ngIf="sheet.noteEncadreur > -1 && sheet.noteRapporteur > -1">
+            La fiche PFE en attente de <span class="text-warning">planification .</span>
+          </p>
+
+        </ng-template>
+        <p *ngIf="sheet.etat === 'REQUEST' && user.role === 'Enseignant'">La demande a été envoyée : <span class="text-warning"> {{ sheet.note }}</span></p>
+
+      </div>
+      <div class="form-group" *ngIf="sheet.etat != 'PRE_VALIDATE'">
+        <button type="button"  *ngIf="user.role === 'Etudiant' && (( sheet.etat === 'VALIDATE' && exist_e && sheet.noteEncadreur < 0) || sheet.etat === 'DEFAULT' || sheet.etat === 'REFUSE' || sheet.etat === 'REQUEST') && exist_r === false && sheetModify === false" class="btn btn-primary mr-2" (click)="update()">Modifier</button>
+        <button type="button"  *ngIf=" (user.role === 'Etudiant' || user.role === 'DirecteurDesStages') && exist_e && sheetModify === false " class="btn btn-inverse-primary mr-2" (click)="export()">Export PDF</button>
+      </div>
+
+      <div class="form-group"  *ngIf="user.role === 'Enseignant' && sheet.etat === 'PRE_VALIDATE'">
+        <button type="button" class="btn btn-primary mr-2" (click)="valid('accepted')" >Accepter</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="valid('request')">Demander</button>
+      </div>
+      <div class="form-group"  *ngIf="user.role === 'Enseignant' && sheet.etat === 'VALIDATE'">
+        <button type="button" class="btn btn-primary mr-2" (click)="note('encadreur')" *ngIf="verifEnseignant('ENCADREUR') && sheet.noteEncadreur < 0" >Note encadreur</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="note('rapporteur')" *ngIf="verifEnseignant('RAPPORTEUR') && sheet.noteRapporteur < 0">Note rapporteur</button>
+      </div>
+      <div class="form-group"  *ngIf="user.role === 'DirecteurDesStages' && sheet.etat === 'DEFAULT'">
+        <button type="button" class="btn btn-primary mr-2" (click)="valid('accepted')">Accepter</button>
+        <button type="button" class="btn btn-inverse-danger mr-2" (click)="valid('refuse')">Refuser</button>
+      </div>
+      <div class="form-group" *ngIf="user.role === 'ChefDeDepartement'">
+        <button type="button" class="btn btn-inverse-success mr-2" (click)="updateEnseignant('encadreur')" *ngIf="exist_e === true && sheet.noteEncadreur < 0 ">Modifier encadreur</button>
+        <button type="button" class="btn btn-inverse-success mr-2" (click)="updateEnseignant('rapporteur')" *ngIf="exist_r === true && sheet.noteRapporteur < 0">Modifier rapporteur</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="affect('validateur')" *ngIf="exist_v === false && sheet.etat === 'ACCEPTED';else btnencadreur">Affecter Validateur</button>
+        <ng-template #btnencadreur>
+          <button type="button" class="btn btn-primary mr-2" (click)="affect('encadreur')" *ngIf="exist_e === false && sheet.etat === 'VALIDATE';else btnrapporteur">Affecter Encadreur</button>
+        </ng-template>
+        <ng-template #btnrapporteur>
+          <button type="button" class="btn btn-primary mr-2" (click)="affect('rapporteur')" *ngIf="exist_r === false && sheet.etat === 'VALIDATE'">Affecter Rapporteur</button>
+        </ng-template>
+      </div>
+      <p class="text-primary cursor-pointer" *ngIf="user.role === 'ChefDeDepartement'" (click)="showDetails()"><u>voir historique</u></p>
+    </div>
+  </div>
+  <app-add-sheetpfe *ngIf="edit || ( !sheet && add )" [sheet]="sheet" [edit]="edit" (hide)="hide($event)"></app-add-sheetpfe>
+  <div class="card">
+    <div class="card-body">
+      <app-detail-sheetpfe [sheet]="sheet" *ngIf="details"></app-detail-sheetpfe>
+    </div>
+  </div>
+  <ngx-spinner bdColor="rgba(255,255,255,0.1)">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </ngx-spinner>
+</ng-template>
+
+
+

@@ -1,0 +1,19 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <span *ngFor="let item of items; let i=index">
+      <li class="nav-item" *ngIf="item.roles.indexOf(user.role)!==-1 || item.roles==='All'">
+        <a class="nav-link" routerLink="{{item.path}}" routerLinkActive="active" [queryParams]=item.queryParams>
+          <i class="{{item.icon}}"></i>
+          <span>{{item.title}}</span>
+        </a>
+      </li>
+    </span>
+
+
+
+
+
+
+
+  </ul>
+</nav>

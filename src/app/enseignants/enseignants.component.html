@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Enseignants</h4>
+        <p class="card-description">
+          Liste des enseignants
+        </p>
+        <div class="spinner-border" role="status" *ngIf="loading">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <p *ngIf="!loading && enseignants.length===0">
+          Il n'y a pas encore d'enseignants dans cet école
+        </p>
+        <div class="table-responsive" *ngIf="!loading && enseignants.length>0">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Site</th>
+                <th>Directeur des stages</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let enseignant of enseignants;">
+                <td>{{enseignant.prenom}} {{enseignant.nom}}</td>
+                <td>{{enseignant.email}}</td>
+                <td>{{enseignant.site.nom}}</td>
+                <td>
+                  <span *ngIf="enseignant.directeurDesStages!==null">{{enseignant.directeurDesStages.nom}}</span>
+                  <span *ngIf="enseignant.directeurDesStages===null">Non</span>
+                </td>
+                <td align="right">
+                  <button class="btn btn-primary btn-fw" type="button" (click)=(openFormAffecter(enseignant)) *ngIf="enseignant.directeurDesStages===null">
+                    Affecter directeur des stages
+                  </button>
+                  <button class="btn btn-danger btn-fw" type="button" (click)=(supprimer(enseignant))>Supprimer</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="ajouter">
+          <button class="btn btn-primary btn-fw" type="button" (click)=(openForm()) [disabled]="loading">Ajouter un
+            enseignant</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

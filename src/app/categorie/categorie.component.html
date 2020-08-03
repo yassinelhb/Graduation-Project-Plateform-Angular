@@ -1,0 +1,67 @@
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Liste des categories</h4>
+      <div class="table-responsive ">
+        <table class="table ">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>image</th>
+            <th>Existe comme module</th>
+            <th>Détails</th>
+            <th>Supprimer</th>
+          </tr>
+          </thead>
+          <tbody *ngFor="let Q of categories">
+          <tr>
+            <td>{{Q.name}}</td>
+            <td class="py-1">
+            <img src="{{Q.image}}" alt="image" /></td>
+            <td>{{Q.exixtecommemodule}}</td>
+            <td><button class="btn btn-outline-secondary icon-btn" type="button"  > <i class="mdi mdi-border-color"> </i> </button></td>
+            <td><button class="btn btn-info" type="button"  (click)="supprimer(Q.id)"><i class="mdi mdi-delete"></i>Supprimer</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br>
+<div class="row">
+  <div class="col-md-6 d-flex align-items-stretch grid-margin">
+    <div class="row flex-grow">
+      <div class="col-12 grid-margin">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Ajouter une nouvelle categorie</h4>
+            <form class="forms-sample"  [formGroup]="categorief">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Nom de categorie</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nom " formControlName="nom">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Choisir image</label><br>
+                <input type="file"
+                       id="avatar" name="avatar"
+                       accept="image/png, image/jpeg"
+                       accept=".png, .jpg, .jpeg"
+                       formControlName="image">
+              </div>
+              <div class="form-group">
+                <label for="exampleSelectPrimary">Existe comme module</label>
+                <select class="form-control border-primary" id="exampleSelectPrimary" formControlName="existe">
+                  <option value="false">n'existe pas</option>
+                  <option value="true">existe</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-success mr-2" (click)="ajouter()">Ajouter</button>
+              <button class="btn btn-light">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
